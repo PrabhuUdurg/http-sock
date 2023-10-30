@@ -39,10 +39,12 @@ protected:
         {
         case CustomMsgTypes::ServerPing:
         {
-            std::cout << "[" << client->GetID() << "]: Server Ping\n";
+           std::cout << "[" << client->GetID() << "]: Received Server Ping\n";
 
-            // Simply bounce message back to client
-            client->Send(msg);
+            // Respond back to the client
+            olc::net::message<CustomMsgTypes> responseMsg;
+            responseMsg.header.id = CustomMsgTypes::ServerPing;
+            client->Send(responseMsg); 
         }
         break;
 
