@@ -1,7 +1,8 @@
 #pragma once
 #include "net-common.h"
 
-// This is template for message
+// This is template for sending message. We are using Template
+// because we can't know which datatype user will send for us
 namespace olc
 {
 	namespace net
@@ -24,7 +25,7 @@ namespace olc
 			message_header<T> header{};
 			std::vector<uint8_t> body;
 
-			// returns size of entire messsage packet in bytes
+			// Return Size of header and body in bytes
 			size_t size() const
 			{
 				return sizeof(message_header<T>) + body.size();
@@ -86,6 +87,7 @@ namespace olc
 		template <typename T>
 		class connection;
 
+		// To identify from which client this request came.
 		template <typename T>
 		struct owned_message
 		{

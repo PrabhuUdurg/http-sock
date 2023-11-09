@@ -1,5 +1,4 @@
 #pragma once
-
 #include <memory>
 #include <thread>
 #include <mutex>
@@ -14,5 +13,5 @@
 #define ASIO_STANDALONE
 
 #include <asio.hpp>
-#include <asio/ts/buffer.hpp>
-#include <asio/ts/internet.hpp>
+#include <asio/ts/buffer.hpp>   // Movement of memory
+#include <asio/ts/internet.hpp> // Network communication

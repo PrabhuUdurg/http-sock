@@ -1,0 +1,7 @@
+/Users/egorpishiy/Documents/Projects/http-sock/src/build/CMakeFiles/HTTP-SOCK.dir
+/Users/egorpishiy/Documents/Projects/http-sock/src/build/CMakeFiles/edit_cache.dir
+/Users/egorpishiy/Documents/Projects/http-sock/src/build/CMakeFiles/rebuild_cache.dir
+/Users/egorpishiy/Documents/Projects/http-sock/src/build/CMakeFiles/list_install_components.dir
+/Users/egorpishiy/Documents/Projects/http-sock/src/build/CMakeFiles/install.dir
+/Users/egorpishiy/Documents/Projects/http-sock/src/build/CMakeFiles/install/local.dir
+/Users/egorpishiy/Documents/Projects/http-sock/src/build/CMakeFiles/install/strip.dir

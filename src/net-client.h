@@ -2,6 +2,8 @@
 #include "net-common.h"
 #include "olc-net.h"
 
+// net-client responsoble for setting up ASIO and connection
+// Also create access point to make client talk to server
 namespace olc
 {
     namespace net

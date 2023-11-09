@@ -1,8 +1,9 @@
-
+#pragma once
 #include "net-common.h"
 #include "net-tsqueue.h"
 #include "net-message.h"
 
+// Connection object is the glue of our server
 namespace olc
 {
     namespace net
@@ -39,6 +40,7 @@ namespace olc
                 {
                     if (m_socket.is_open())
                     {
+                        // Store the ID
                         id = uid;
                         ReadHeader();
                     }
@@ -68,6 +70,8 @@ namespace olc
                                { m_socket.close(); });
                 }
             }
+
+            // Telling is socket connected
             bool IsConnected() const
             {
                 return m_socket.is_open();
@@ -79,6 +83,7 @@ namespace olc
                 asio::post(m_asioContext,
                            [this, msg]()
                            {
+                               // Take message from buffer
                                bool bWritingMessage = !m_qMessagesOut.empty();
                                m_qMessagesOut.push_back(msg);
                                if (!bWritingMessage)
@@ -92,6 +97,7 @@ namespace olc
             // ASYNC - Prime context ready to read message header
             void ReadHeader()
             {
+                // Read from socket and store it
                 asio::async_read(m_socket, asio::buffer(&m_msgTemporaryIn.header, sizeof(message_header<T>)),
                                  [this](std::error_code ec, std::size_t length)
                                  {
@@ -121,6 +127,7 @@ namespace olc
                 asio::async_read(m_socket, asio::buffer(&m_msgTemporaryIn.header, sizeof(message_header<T>)),
                                  [this](std::error_code ec, std::size_t length)
                                  {
+                                     // Safety checks
                                      if (!ec)
                                      {
                                          AddToIncomingMessageQueue();
@@ -140,6 +147,7 @@ namespace olc
                 asio::async_write(m_socket, asio::buffer(&m_qMessagesOut.front().header, sizeof(message_header<T>)),
                                   [this](std::error_code ec, std::size_t length)
                                   {
+                                      // Safety checks
                                       if (!ec)
                                       {
                                           if (m_qMessagesOut.front().body.size() > 0)
@@ -170,6 +178,7 @@ namespace olc
                 asio::async_write(m_socket, asio::buffer(m_qMessagesOut.front().body.data(), m_qMessagesOut.front().body.size()),
                                   [this](std::error_code ec, std::size_t length)
                                   {
+                                      // Safety checks
                                       if (!ec)
                                       {
                                           m_qMessagesOut.pop_front();
@@ -189,6 +198,7 @@ namespace olc
 
             void AddToIncomingMessageQueue()
             {
+                // Transform message into ownership of server, adding to queue
                 if (m_nOwnerType == owner::server)
                     m_qMessagesIn.push_back({this->shared_from_this(), m_msgTemporaryIn});
                 else

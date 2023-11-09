@@ -1,8 +1,7 @@
 #pragma once
-
 #include "net-common.h"
-#include "olc-net.h"
 
+// TODO: Custom C sockets.
 namespace olc
 {
     namespace net
@@ -12,7 +11,7 @@ namespace olc
         {
         public:
             server_interface(uint16_t port)
-                // Listening users, IPv4 version
+                // Listening users, IPv4 version, and context
                 : m_asioAcceptor(m_asioContext, asio::ip::tcp::endpoint(asio::ip::tcp::v4(), port))
             {
             }
@@ -26,8 +25,10 @@ namespace olc
             {
                 try
                 {
-                    WaitForClientConnection(); // Gice some work for io_context
+                    // Gice some work for io_context before the thread
+                    WaitForClientConnection();
 
+                    // Start Context
                     m_threadContext = std::thread([this]()
                                                   { m_asioContext.run(); });
                 }
@@ -78,6 +79,7 @@ namespace olc
                                 // Connection allowed, so add to container of new conection
                                 m_deqConnections.push_back(std::move(newconn));
 
+                                // Assign ID to connections
                                 m_deqConnections.back()->ConnectToClient(nIDCounter++);
 
                                 std::cout << "[" << m_deqConnections.back()->GetID() << "] Connection Approved\n";
@@ -102,7 +104,7 @@ namespace olc
             // shared_ptr can keep ownership over couple objects
             void MessageClient(std::shared_ptr<connection<T>> client, const message<T> &msg)
             {
-                // Checking if cliebt pointer is correct, and client connected
+                // Checking if client pointer is correct, and client connected
                 if (client && client->IsConnected())
                 {
                     client->Send(msg);
@@ -141,6 +143,8 @@ namespace olc
                 }
 
                 if (bInvalidClientExists)
+
+                    // Entirely remove client from deque of connections
                     m_deqConnections.erase(
                         std::remove(m_deqConnections.begin(), m_deqConnections.end(), nullptr), m_deqConnections.end());
             }
@@ -177,7 +181,7 @@ namespace olc
             {
             }
 
-            // Called when a message arrives
+            // Called when a message arrives. Help server to deal with specific messages.
             virtual void OnMessage(std::shared_ptr<connection<T>> client, message<T> &msg)
             {
             }
@@ -196,7 +200,7 @@ namespace olc
             // Sockets of connected clients
             asio::ip::tcp::acceptor m_asioAcceptor;
 
-            // Clients will be identified in the "wider system" via an ID
+            // ID which assigns to user
             uint32_t nIDCounter = 10000;
         };
     }

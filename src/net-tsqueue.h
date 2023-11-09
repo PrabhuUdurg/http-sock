@@ -1,6 +1,11 @@
 #pragma once
 #include "net-common.h"
 
+// ts = thread safe
+// We need queue to store data which client send to server.
+// And Queue for client to store responses
+// Server has just one queue(thread)
+
 namespace olc
 {
     namespace net
@@ -97,7 +102,7 @@ namespace olc
             }
 
         protected:
-            std::mutex muxQueue;
+            std::mutex muxQueue; // we use mutex to block others threads from performing while one is working.
             std::deque<T> deqQueue;
             std::condition_variable cvBlocking;
             std::mutex muxBlocking;

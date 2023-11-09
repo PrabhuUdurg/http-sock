@@ -1,5 +1,4 @@
 #pragma once
-
 #include "net-common.h"
 #include "net-tsqueue.h"
 #include "net-message.h"
