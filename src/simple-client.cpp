@@ -13,6 +13,26 @@ enum class CustomMsgTypes : uint32_t {
 
 class CustomClient : public olc::net::client_interface<CustomMsgTypes> {
 public:
+<<<<<<< HEAD
+	void PingServer()
+	{
+		olc::net::message<CustomMsgTypes> msg;
+		msg.header.id = CustomMsgTypes::ServerPing;
+
+		// Caution this
+		std::chrono::system_clock::time_point timeNow = std::chrono::system_clock::now();
+
+		msg << timeNow;
+		Send(msg);
+	}
+
+	void MessageAll()
+	{
+		olc::net::message<CustomMsgTypes> msg;
+		msg.header.id = CustomMsgTypes::MessageAll;
+		Send(msg);
+	}
+=======
     void PingServer() {
         olc::net::message<CustomMsgTypes> msg;
         msg.header.id = CustomMsgTypes::ServerPing;
@@ -20,6 +40,7 @@ public:
         msg << timeNow;
         Send(msg);
     }
+>>>>>>> 55eb5680ae4ee81a5626d1e387812ee3bb6c366d
 };
 
 int main() {
@@ -66,6 +87,45 @@ int main() {
         if (key[1] && !old_key[1]) std::cout << "2 key pressed" << std::endl;
         if (key[2] && !old_key[2]) bQuit = true;
 
+<<<<<<< HEAD
+				switch (msg.header.id)
+				{
+				case CustomMsgTypes::ServerAccept:
+				{
+					// Server has responded to a ping request
+					std::cout << "Server Accepted Connection\n";
+				}
+				break;
+
+				case CustomMsgTypes::ServerMessage:
+				{
+					// Server has responded to a ping request
+					uint32_t clientID;
+					msg >> clientID;
+					std::cout << "Hello from [" << clientID << "]\n";
+				}
+				break;
+
+				case CustomMsgTypes::ServerPing:
+				{
+					std::chrono::system_clock::time_point timeNow = std::chrono::system_clock::now();
+					std::chrono::system_clock::time_point timeThen;
+					msg >> timeThen;
+					std::cout << "Ping: " << std::chrono::duration<double>(timeNow - timeThen).count() << "\n";
+					break;
+				}
+				break;
+				}
+			}
+			else
+			{
+				std::cout << "Server Down\n";
+				bQuit = true;
+			}
+		}
+		return 0;
+	}
+=======
         for (int i = 0; i < 3; i++) old_key[i] = key[i];
 
         if (c.IsConnected()) {
@@ -89,4 +149,5 @@ int main() {
 
     XCloseDisplay(dpy);
     return 0;
+>>>>>>> 55eb5680ae4ee81a5626d1e387812ee3bb6c366d
 }
